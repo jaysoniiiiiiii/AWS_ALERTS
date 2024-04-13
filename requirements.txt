@@ -1,0 +1,5 @@
+Flask==2.0.2
+flask_sqlalchemy
+requests
+boto3
+smtplib

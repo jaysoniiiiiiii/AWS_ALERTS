@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block head %}
+<!-- Add any additional stylesheets or scripts here -->
+<link rel="stylesheet" type="text/css" href="/static/css/login.css">
+
+{% endblock %}
+
+{% block body %}
+<section>
+    <div class="user">
+        {% if error_message %}
+            <center><p class="error">{{ error_message }}</p></center>
+        {% endif %}
+        <div class="formBx">
+            <form action="/form_login" method="POST">
+                <h2>Login</h2>
+                <div class="form-group">
+                    <label for="email"></label>
+                    <input type="email" name="email" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password"></label>
+                    <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <!-- <button type="submit">Sign In</button> -->
+                <input type="submit" name="" value="log In">
+                <p class="signup">Do not have an account ?<a href="/signup" onclick="toggleForm();">signup.</a></p>
+            </form>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    // JavaScript code for any client-side interactions or behavior
+</script>
+{% endblock %}

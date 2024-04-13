@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block head %}
+{% endblock %}
+
+{% block body %}
+
+
+
+	<section>
+		
+
+			<div class="user">
+				{% if error_message %}
+					<center><p class="error" >{{ error_message }}</p></center>
+				{% endif %}	
+				<div class="formBx">
+					<form action="/form_signup" method="POST">
+						<h2>Create Account</h2>
+						<input type="text" name="name" id="name" placeholder="Name" required>
+						<input type="text" name="surname" id="surname" placeholder="Surname" required>
+						<input type="text" name="github_username" id="github_username" placeholder="Github Username" required>
+						<input type="email" name="email" id="email" placeholder="Email Address" required>
+						<input type="password" name="access_key" id="access_key" placeholder="Access Key" required>
+						<input type="password" name="secrete_accesskey" id="secrete_accesskey" placeholder="Secrete Access Key" required>
+						<input type="password" name="password" id="password" placeholder="Password" required>
+						<input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+						<input type="submit" name="" value="Sign In">
+						<p class="signup">Already have an account ?<a href="/" onclick="toggleForm();">login.</a></p>
+					</form>
+				</div>
+				
+			</div>
+
+	</section>
+	<script type="text/javascript">
+		function toggleForm()
+		{
+			var container = document.querySelector('.container');
+			container.classList.toggle('active')
+		}
+	</script>
+{% endblock%}
