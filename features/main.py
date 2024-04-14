@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, session, redirect, url_for, request
 from features.models import AccountInfo
 import requests
-import json
+from botocore.exceptions import ClientError
 from features.my_email_utils import send_email
 from features.ec2_instances import get_ec2_instances
 from features.s3_buckets import get_s3_buckets
@@ -12,34 +12,37 @@ main_routes = Blueprint('main', __name__)
 
 @main_routes.route('/main', methods=['GET', 'POST'])
 def main_page():
-    # Check if user is logged in
     if 'user_id' in session:
         user_id = session['user_id']
-        # Retrieve user data using user_id
         user = AccountInfo.query.get(user_id)
         if user:
             username = user.githubusername
             api_url = f'https://api.github.com/users/{username}'
             repo_url = f'https://api.github.com/users/{username}/repos'
 
-            # Retrieve data from GitHub API
             response = requests.get(api_url)
             profile_data = response.json()
 
             response = requests.get(repo_url)
             repositories_data = response.json()
 
-            # Retrieve AWS data
-            aws_access_key_id = user.accesskey
-            aws_secret_access_key = user.secreteaccesskey
-            region_name = 'us-west-2'  # Replace with your region
+            ec2_instances = None
+            s3_buckets = None
+            ebs_volumes = None
+            eks_clusters = None
 
-            ec2_instances = get_ec2_instances(aws_access_key_id, aws_secret_access_key, region_name="ap-south-1")
-            s3_buckets = get_s3_buckets(aws_access_key_id, aws_secret_access_key, region_name="ap-south-1")
-            ebs_volumes = get_ebs_volumes(aws_access_key_id, aws_secret_access_key, region_name="ap-south-1")
-            eks_clusters = get_eks_clusters(aws_access_key_id, aws_secret_access_key, region_name="ap-south-1")
+            try:
+                aws_access_key_id = user.accesskey
+                aws_secret_access_key = user.secreteaccesskey
+                region_name = 'us-west-2'
 
-            # Combine user data, GitHub API data, and AWS data into a dictionary
+                ec2_instances = get_ec2_instances(aws_access_key_id, aws_secret_access_key, region_name="ap-south-1")
+                s3_buckets = get_s3_buckets(aws_access_key_id, aws_secret_access_key, region_name="ap-south-1")
+                ebs_volumes = get_ebs_volumes(aws_access_key_id, aws_secret_access_key, region_name="ap-south-1")
+                eks_clusters = get_eks_clusters(aws_access_key_id, aws_secret_access_key, region_name="ap-south-1")
+            except ClientError as e:
+                print("AWS credentials validation failed:", e)
+
             user_data = {
                 'user': user,
                 'profile': profile_data,
@@ -51,11 +54,8 @@ def main_page():
             }
 
             if request.method == 'POST':
-                # Send email functionality
-                block_name = request.form.get('block_name')  # Get the block name from the form data
+                block_name = request.form.get('block_name')
                 email_content = format_email_content(user_data, block_name)
-                print("Email Content:")
-                print(email_content)  # Print email content for debugging
 
                 sender_email = "sonij5073@gmail.com"
                 sender_password = "bgyr vkbt olls ogis"
@@ -63,13 +63,10 @@ def main_page():
                 subject = "AWS Data"
                 send_email(sender_email, sender_password, receiver_email, subject, email_content)
 
-                # Redirect to the same page after sending email
                 return redirect(url_for('main_routes.main_page'))
 
-            # Pass user data to the main page template
             return render_template("main.html", user_data=user_data)
 
-    # If user is not logged in, redirect to login page
     return redirect(url_for('login.login'))
 
 
