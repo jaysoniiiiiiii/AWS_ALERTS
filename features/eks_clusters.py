@@ -31,7 +31,7 @@ def get_eks_clusters(aws_access_key_id, aws_secret_access_key, aws_session_token
             "Creation Time": create_time
         })
 
-    print(eks_cluster_list)
+    # print(eks_cluster_list)
 
     return eks_cluster_list
 
@@ -45,5 +45,5 @@ if __name__ == "__main__":
     region_name = 'us-west-2'  # Replace with your region
 
     clusters = get_eks_clusters(aws_access_key_id, aws_secret_access_key, region_name=region_name)
-    for cluster in clusters:
-        print(cluster)
+    # for cluster in clusters:
+    #     print(cluster)

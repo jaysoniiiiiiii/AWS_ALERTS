@@ -38,7 +38,7 @@ def get_ec2_instances(aws_access_key_id, aws_secret_access_key, aws_session_toke
                 "Public IP": public_ip_address,
                 "Launch Time": launch_time
             })
-    print(EC2_instance_list)
+    # print(EC2_instance_list)
 
     return EC2_instance_list
 
@@ -52,5 +52,5 @@ if __name__ == "__main__":
     region_name = 'us-west-2'  # Replace with your region
 
     instances = get_ec2_instances(aws_access_key_id, aws_secret_access_key, region_name=region_name)
-    for instance in instances:
-        print(instance)
+    # for instance in instances:
+    #     print(instance)

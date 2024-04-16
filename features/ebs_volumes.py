@@ -33,7 +33,7 @@ def get_ebs_volumes(aws_access_key_id, aws_secret_access_key, aws_session_token=
             "State": state
         })
 
-    print(ebs_volume_list)
+    # print(ebs_volume_list)
 
     return ebs_volume_list
 
@@ -47,5 +47,5 @@ if __name__ == "__main__":
     region_name = 'us-west-2'  # Replace with your region
 
     volumes = get_ebs_volumes(aws_access_key_id, aws_secret_access_key, region_name=region_name)
-    for volume in volumes:
-        print(volume)
+    # for volume in volumes:
+    #     print(volume)

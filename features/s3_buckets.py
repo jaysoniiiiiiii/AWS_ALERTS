@@ -31,7 +31,7 @@ def get_s3_buckets(aws_access_key_id, aws_secret_access_key, aws_session_token=N
             # "Object Count": object_count  # Uncomment this line to include object count
         })
 
-    print(s3_bucket_list)
+    # print(s3_bucket_list)
 
     return s3_bucket_list
 
@@ -45,5 +45,5 @@ if __name__ == "__main__":
     region_name = 'us-west-2'  # Replace with your region
 
     buckets = get_s3_buckets(aws_access_key_id, aws_secret_access_key, region_name=region_name)
-    for bucket in buckets:
-        print(bucket)
+    # for bucket in buckets:
+    #     print(bucket)
